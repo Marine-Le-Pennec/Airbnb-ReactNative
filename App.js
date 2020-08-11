@@ -23,7 +23,9 @@ export default function App() {
         <Stack.Screen name="Login">
           {() => <Login setToken={setToken} />}
         </Stack.Screen>
-        <Stack.Screen name="Signup" component={Signup}></Stack.Screen>
+        <Stack.Screen name="Signup">
+          {() => <Signup setToken={setToken} token={token} />}
+        </Stack.Screen>
 
         <Stack.Screen name="Home" component={Home}></Stack.Screen>
       </Stack.Navigator>

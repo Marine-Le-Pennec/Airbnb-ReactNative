@@ -31,6 +31,8 @@ const Login = ({ setToken }) => {
         const token = response.data.token;
         AsyncStorage.setItem("token", token);
         setToken(token);
+        alert("Ravis de vous voir de retour!");
+        navigation.navigate("Home");
       } else {
         alert("Utilisateur inconnu. Veuillez créer un compte");
       }
