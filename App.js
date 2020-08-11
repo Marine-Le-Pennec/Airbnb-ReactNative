@@ -16,6 +16,7 @@ const Stack = createStackNavigator();
 export default function App() {
   const userToken = AsyncStorage.getItem("token");
   const [token, setToken] = useState(userToken || null);
+  const [user, setUser] = useState("");
 
   return (
     <NavigationContainer>
@@ -24,7 +25,7 @@ export default function App() {
           {() => <Login setToken={setToken} />}
         </Stack.Screen>
         <Stack.Screen name="Signup">
-          {() => <Signup setToken={setToken} token={token} />}
+          {() => <Signup setToken={setToken} setUser={setUser} />}
         </Stack.Screen>
 
         <Stack.Screen name="Home" component={Home}></Stack.Screen>

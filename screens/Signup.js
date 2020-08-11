@@ -12,7 +12,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { TextInput } from "react-native-gesture-handler";
 
-const Signup = ({ token }) => {
+const Signup = ({ setToken, setUser }) => {
   const navigation = useNavigation();
 
   const [email, setEmail] = useState("");
@@ -41,19 +41,20 @@ const Signup = ({ token }) => {
             password: password,
           }
         );
-        console.log(response.data.token);
 
         if (!response.data.token) {
           alert("Utilisateur déjà enregistré!");
         } else {
           const token = response.data.token;
           AsyncStorage.setItem("token", token);
+          console.log("log de response de signup: ", response.data);
           setToken(token);
+          setUser(response.data.id);
           alert("Bienvenue sur Airbnb!");
           navigation.navigate("Home");
         }
       } catch (error) {
-        alert("An error occurred");
+        console.log(error.message);
       }
     }
   };

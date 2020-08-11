@@ -27,6 +27,7 @@ const Login = ({ setToken }) => {
         "https://express-airbnb-api.herokuapp.com/user/log_in",
         { email: email, password: password }
       );
+      console.log("le data du login=", response.data);
       if (response.data.token) {
         const token = response.data.token;
         AsyncStorage.setItem("token", token);
