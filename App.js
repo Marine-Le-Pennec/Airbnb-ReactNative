@@ -1,21 +1,34 @@
-import { StatusBar } from 'expo-status-bar';
-import React from 'react';
-import { StyleSheet, Text, View } from 'react-native';
+import { StatusBar } from "expo-status-bar";
+import React, { useState } from "react";
+import { StyleSheet, Text, View, AsyncStorage, Image } from "react-native";
+
+// React Navigation
+import { NavigationContainer } from "@react-navigation/native";
+import { createStackNavigator, StackView } from "@react-navigation/stack";
+
+// Screens imports
+import Home from "./screens/Home";
+import Login from "./screens/Login";
+import Signup from "./screens/Signup";
+
+const Stack = createStackNavigator();
 
 export default function App() {
+  const userToken = AsyncStorage.getItem("token");
+  const [token, setToken] = useState(userToken || null);
+
   return (
-    <View style={styles.container}>
-      <Text>Open up App.js to start working on your app!</Text>
-      <StatusBar style="auto" />
-    </View>
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Login">
+          {() => <Login setToken={setToken} />}
+        </Stack.Screen>
+        <Stack.Screen name="Signup" component={Signup}></Stack.Screen>
+
+        <Stack.Screen name="Home" component={Home}></Stack.Screen>
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+const styles = StyleSheet.create({});
