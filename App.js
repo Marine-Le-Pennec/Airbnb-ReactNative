@@ -1,5 +1,5 @@
 import { StatusBar } from "expo-status-bar";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 
 // React Navigation
@@ -18,27 +18,41 @@ import Card from "./screens/Card";
 const Stack = createStackNavigator();
 
 const Tab = createBottomTabNavigator();
-// function MyTabs() {
-//   return (
-//     <NavigationContainer>
-//       {" "}
-//       <Tab.Navigator>
-//         <Tab.Screen name="Home" component={Home}></Tab.Screen>
-//         {/* <Tab.Screen></Tab.Screen> */}
-//         {/* <Tab.Screen name="Profile"></Tab.Screen> */}
-//       </Tab.Navigator>
-//     </NavigationContainer>
-//   );
-// }
 
 export default function App() {
-  const userToken = AsyncStorage.getItem("token");
-  const [token, setToken] = useState(userToken || null);
+  const [token, setToken] = useState(Token || null);
   const [user, setUser] = useState("");
+
+  const [isLoading, setIsLoading] = useState(true);
+
+  const Token = async (token) => {
+    if (token) {
+      AsyncStorage.setItem("token", token);
+    } else {
+      AsyncStorage.removeItem("token");
+    }
+
+    Token(token);
+  };
+
+  useEffect(() => {
+    // Fetch the token from storage then navigate to our appropriate place
+    const bootstrapAsync = async () => {
+      // We should also handle error for production apps
+      const getToken = await AsyncStorage.getItem("token");
+
+      // This will switch to the App screen or Auth screen and this loading
+      // screen will be unmounted and thrown away.
+      setIsLoading(false);
+      setToken(token);
+    };
+
+    bootstrapAsync();
+  }, []);
 
   return (
     <NavigationContainer>
-      {!token ? (
+      {isLoading ? null : token === null ? (
         <Stack.Navigator>
           <Stack.Screen name="Login">
             {() => <Login setToken={setToken} />}
