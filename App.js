@@ -1,6 +1,7 @@
 import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, AsyncStorage } from "react-native";
+import { Ionicons } from "@expo/vector-icons";
 
 // React Navigation
 import { NavigationContainer } from "@react-navigation/native";
@@ -16,7 +17,6 @@ import Signup from "./screens/Signup";
 import Card from "./screens/Card";
 
 const Stack = createStackNavigator();
-
 const Tab = createBottomTabNavigator();
 
 export default function App() {
@@ -62,9 +62,41 @@ export default function App() {
           </Stack.Screen>
         </Stack.Navigator>
       ) : (
+        // <Stack.Navigator>
+        //   <Stack.Screen name="Home" component={Home}></Stack.Screen>
+        //   <Stack.Screen name="Card" component={Card}></Stack.Screen>
+        // </Stack.Navigator>
         <Stack.Navigator>
-          <Stack.Screen name="Home" component={Home}></Stack.Screen>
-          <Stack.Screen name="Card" component={Card}></Stack.Screen>
+          <Stack.Screen
+            name="Tab"
+            options={{ header: () => null, animationEnabled: false }}
+          >
+            {() => (
+              <Tab.Navigator
+                tabBarOptions={{
+                  activeTintColor: "tomato",
+                  inactiveTintColor: "gray",
+                }}
+              >
+                <Tab.Screen
+                  name="HomeScreen"
+                  options={{
+                    tabBarLabel: "Home",
+                    tabBarIcon: ({ color, size }) => (
+                      <Ionicons name={"ios-home"} size={size} color={color} />
+                    ),
+                  }}
+                >
+                  {() => (
+                    <Stack.Navigator>
+                      <Stack.Screen name="Home" component={Home}></Stack.Screen>
+                      <Stack.Screen name="Card" component={Card}></Stack.Screen>
+                    </Stack.Navigator>
+                  )}
+                </Tab.Screen>
+              </Tab.Navigator>
+            )}
+          </Stack.Screen>
         </Stack.Navigator>
       )}
     </NavigationContainer>
