@@ -39,7 +39,8 @@ const Signup = ({ setToken, setUser }) => {
             name: name,
             description: description,
             password: password,
-          }
+          },
+          { headers: { "Content-Type": "application/json" } }
         );
 
         if (!response.data.token) {
@@ -60,57 +61,70 @@ const Signup = ({ setToken, setUser }) => {
   };
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={{ backgroundColor: "#F35960", flex: 1 }}>
       <View>
-        <Text>Rejoignez-nous!</Text>
-        <View>
+        <Text style={styles.title}>Rejoignez-nous!</Text>
+        <View style={{ alignItems: "center" }}>
           <TextInput
+            style={styles.input}
             autoCapitalize="none"
             placeholder="email"
+            placeholderTextColor="#E7AFB1"
             value={email}
             onChangeText={(text) => {
               setEmail(text);
             }}
           ></TextInput>
           <TextInput
+            style={styles.input}
             placeholder="username"
+            placeholderTextColor="#E7AFB1"
             value={username}
             onChangeText={(text) => {
               setUsername(text);
             }}
           ></TextInput>
           <TextInput
+            style={styles.input}
             placeholder="name"
+            placeholderTextColor="#E7AFB1"
             value={name}
             onChangeText={(text) => {
               setName(text);
             }}
           ></TextInput>
           <TextInput
+            style={styles.description}
+            multiline={true}
             placeholder="présentez-vous en quelques mots..."
+            placeholderTextColor="#E7AFB1"
             value={description}
             onChangeText={(text) => {
               setDescription(text);
             }}
           ></TextInput>
           <TextInput
+            style={styles.input}
             secureTextEntry={true}
             placeholder="mot de passe"
+            placeholderTextColor="#E7AFB1"
             value={password}
             onChangeText={(text) => {
               setPassword(text);
             }}
           ></TextInput>
           <TextInput
+            style={styles.input}
             secureTextEntry={true}
             placeholder="confirmez le mot de passe"
+            placeholderTextColor="#E7AFB1"
             value={checkPassword}
             onChangeText={(text) => {
               setCheckPassword(text);
             }}
           ></TextInput>
         </View>
-        <View>
+        <View style={{ alignItems: "center" }}>
           <TouchableOpacity style={styles.submit}>
             <Text style={styles.textSubmit} onPress={handleSubmit}>
               S'inscrire
@@ -123,7 +137,9 @@ const Signup = ({ setToken, setUser }) => {
               navigation.navigate("Login");
             }}
           >
-            <Text>Déjà un compte ? Se connecter</Text>
+            <Text style={styles.signupButton}>
+              Déjà un compte ? Se connecter
+            </Text>
           </TouchableWithoutFeedback>
         </View>
       </View>
@@ -133,4 +149,51 @@ const Signup = ({ setToken, setUser }) => {
 
 export default Signup;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 24,
+    color: "white",
+    textAlign: "center",
+    marginTop: 51,
+    marginBottom: 65,
+  },
+  input: {
+    marginBottom: 30,
+    borderBottomColor: "black",
+    borderBottomWidth: 1,
+    borderColor: "white",
+    width: 320,
+    borderBottomColor: "white",
+    color: "white",
+    fontSize: 16,
+    lineHeight: 18,
+  },
+  description: {
+    width: 318,
+    height: 117,
+    borderWidth: 1,
+    borderColor: "white",
+    marginBottom: 35,
+    color: "white",
+    padding: 10,
+  },
+  submit: {
+    width: 190,
+    height: 65,
+    backgroundColor: "white",
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textSubmit: {
+    fontSize: 24,
+    color: "#F35960",
+    // textAlign: "center",
+    alignItems: "center",
+  },
+  signupButton: {
+    color: "white",
+    textAlign: "center",
+    marginTop: 43,
+  },
+});

@@ -14,6 +14,7 @@ import {
   TouchableWithoutFeedback,
 } from "react-native-gesture-handler";
 import { useNavigation } from "@react-navigation/native";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 const Login = ({ setToken }) => {
   const navigation = useNavigation();
@@ -22,71 +23,91 @@ const Login = ({ setToken }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    try {
-      const response = await axios.post(
-        "https://express-airbnb-api.herokuapp.com/user/log_in",
-        { email: email, password: password }
-      );
-      console.log("le data du login=", response.data);
-      if (response.data.token) {
-        const token = response.data.token;
-        AsyncStorage.setItem("token", token);
-        setToken(token);
-        alert("Ravis de vous voir de retour!");
-        navigation.navigate("Home");
-      } else {
-        alert("Utilisateur inconnu. Veuillez créer un compte");
+    if (!email || !password) {
+      alert("Veuillez entrer un identifiant et un mot de passe");
+    } else {
+      try {
+        const response = await axios.post(
+          "https://express-airbnb-api.herokuapp.com/user/log_in",
+          { email: email, password: password },
+          { headers: { "Content-Type": "application/json" } }
+        );
+
+        // console.log("le data du login=", response.data);
+        if (response.data.token) {
+          const token = response.data.token;
+          AsyncStorage.setItem("token", token);
+          setToken(token);
+          alert("Ravis de vous voir de retour!");
+          navigation.navigate("Home");
+        }
+      } catch (e) {
+        console.log(e);
+        // alert(e.message);
       }
-    } catch (e) {
-      alert("an error occurred");
     }
   };
   return (
-    <SafeAreaView style={{ backgroundColor: "#F35960", flex: 1 }}>
-      <View style={styles.header}>
-        <Image
-          style={{ width: 100 }}
-          source={require("../assets/Vector.png")}
-        ></Image>
-      </View>
-      <View style={{ alignItems: "center" }}>
-        <TextInput
-          autoCapitalize="none"
-          style={styles.input}
-          value={email}
-          onChangeText={(text) => {
-            setEmail(text);
-          }}
-        />
-        <TextInput
-          secureTextEntry={true}
-          style={styles.input}
-          value={password}
-          onChangeText={(text) => {
-            setPassword(text);
-          }}
-        />
-        <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
-          <Text style={styles.textSubmit}>Se connecter</Text>
-        </TouchableOpacity>
-      </View>
+    <KeyboardAwareScrollView
+      extraScrollHeight={110}
+      contentContainerStyle={styles.container}
+    >
+      <SafeAreaView style={{ backgroundColor: "#F35960", flex: 1 }}>
+        <View style={styles.header}>
+          <Image
+            style={{ width: 100 }}
+            source={require("../assets/Vector.png")}
+          ></Image>
+        </View>
+        <View style={{ alignItems: "center" }}>
+          <TextInput
+            autoCapitalize="none"
+            placeholder="votre-email@email.com"
+            placeholderTextColor="#E7AFB1"
+            style={styles.input}
+            value={email}
+            onChangeText={(text) => {
+              setEmail(text);
+            }}
+          />
+          <TextInput
+            secureTextEntry={true}
+            placeholder="password"
+            placeholderTextColor="#E7AFB1"
+            style={styles.input}
+            value={password}
+            onChangeText={(text) => {
+              setPassword(text);
+            }}
+          />
+          <TouchableOpacity style={styles.submit} onPress={handleSubmit}>
+            <Text style={styles.textSubmit}>Se connecter</Text>
+          </TouchableOpacity>
+        </View>
 
-      <View>
-        <TouchableWithoutFeedback
-          onPress={() => {
-            navigation.navigate("Signup");
-          }}
-        >
-          <Text style={styles.signupButton}>Pas de compte ? S'inscrire</Text>
-        </TouchableWithoutFeedback>
-      </View>
-    </SafeAreaView>
+        <View>
+          <TouchableWithoutFeedback
+            onPress={() => {
+              navigation.navigate("Signup");
+            }}
+          >
+            <Text style={styles.signupButton}>Pas de compte ? S'inscrire</Text>
+          </TouchableWithoutFeedback>
+        </View>
+      </SafeAreaView>
+    </KeyboardAwareScrollView>
   );
 };
 
 export default Login;
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: "#F35960",
+    alignItems: "center",
+    justifyContent: "center",
+  },
   header: {
     marginTop: 109,
     marginBottom: 129,
