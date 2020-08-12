@@ -9,11 +9,11 @@ const Card = ({ route }) => {
 
   return (
     <SafeAreaView style={{ backgroundColor: "#F35960", flex: 1 }}>
-      <View style={{ flex: 1, backgroundColor: "#F35960" }}>
+      <View>
         <Text style={styles.title}>Room</Text>
-        <View style={{ backgroundColor: "white", flex: 1 }}>
-          <View>
-            <ScrollView horizontal={true}>
+        <View style={{ backgroundColor: "white" }}>
+          <ScrollView>
+            <View>
               <FlatList
                 horizontal={true}
                 data={infos.photos}
@@ -29,13 +29,15 @@ const Card = ({ route }) => {
                   );
                 }}
               ></FlatList>
-            </ScrollView>
-          </View>
+            </View>
+          </ScrollView>
+
           <View>
             <View>
+              <Text>{infos.price}</Text>
               <Text>{infos.title}</Text>
               <View>
-                <Text></Text>
+                <Text>{infos.ratingValue}</Text>
                 <Text></Text>
               </View>
             </View>
