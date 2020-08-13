@@ -12,7 +12,7 @@ import {
 import { useNavigation } from "@react-navigation/native";
 import { TextInput } from "react-native-gesture-handler";
 
-const Signup = ({ setToken, setUser }) => {
+const Signup = ({ setToken }) => {
   const navigation = useNavigation();
 
   const [email, setEmail] = useState("");
@@ -50,7 +50,8 @@ const Signup = ({ setToken, setUser }) => {
           AsyncStorage.setItem("token", token);
           console.log("log de response de signup: ", response.data);
           setToken(token);
-          setUser(response.data.id);
+          AsyncStorage.setItem("id", response.data.id);
+
           alert("Bienvenue sur Airbnb!");
           navigation.navigate("Home");
         }

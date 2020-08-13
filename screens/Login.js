@@ -18,7 +18,7 @@ import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view
 
 const Login = ({ setToken }) => {
   const navigation = useNavigation();
-  const [email, setEmail] = useState("");
+  const [email, setEmail] = useState("lepennec.marine@gmail.com");
   const [password, setPassword] = useState("");
 
   const handleSubmit = async (event) => {
@@ -36,8 +36,11 @@ const Login = ({ setToken }) => {
         // console.log("le data du login=", response.data);
         if (response.data.token) {
           const token = response.data.token;
+          console.log("response.data : ", response.data);
           AsyncStorage.setItem("token", token);
           setToken(token);
+          AsyncStorage.setItem("id", response.data.id);
+
           alert("Ravis de vous voir de retour!");
         }
       } catch (e) {

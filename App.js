@@ -23,7 +23,6 @@ const Tab = createBottomTabNavigator();
 
 export default function App() {
   const [token, setToken] = useState(Token || null);
-  const [user, setUser] = useState("");
 
   const [isLoading, setIsLoading] = useState(true);
 
@@ -60,7 +59,7 @@ export default function App() {
             {() => <Login setToken={setToken} />}
           </Stack.Screen>
           <Stack.Screen name="Signup">
-            {() => <Signup setToken={setToken} setUser={setUser} />}
+            {() => <Signup setToken={setToken} />}
           </Stack.Screen>
         </Stack.Navigator>
       ) : (
@@ -106,8 +105,11 @@ export default function App() {
                     <Stack.Navigator>
                       <Stack.Screen
                         name="profile"
-                        component={Userprofile}
-                      ></Stack.Screen>
+                        // component={Userprofile}
+                        option={{ title: "User Profile" }}
+                      >
+                        {() => <Userprofile token={token} />}
+                      </Stack.Screen>
                     </Stack.Navigator>
                   )}
                 </Tab.Screen>

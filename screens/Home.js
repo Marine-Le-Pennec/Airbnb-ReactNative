@@ -49,7 +49,8 @@ export default function Home() {
             <FlatList
               data={data}
               keyExtractor={(item) => {
-                // console.log("data : ", data);
+                // console.log("item : ", item._id);
+
                 return String(item);
               }}
               renderItem={({ item }) => {
