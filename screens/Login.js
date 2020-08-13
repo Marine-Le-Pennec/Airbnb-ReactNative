@@ -39,7 +39,6 @@ const Login = ({ setToken }) => {
           AsyncStorage.setItem("token", token);
           setToken(token);
           alert("Ravis de vous voir de retour!");
-          navigation.navigate("Home");
         }
       } catch (e) {
         console.log(e);

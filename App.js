@@ -2,6 +2,7 @@ import { StatusBar } from "expo-status-bar";
 import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 
 // React Navigation
 import { NavigationContainer } from "@react-navigation/native";
@@ -15,6 +16,7 @@ import Home from "./screens/Home";
 import Login from "./screens/Login";
 import Signup from "./screens/Signup";
 import Card from "./screens/Card";
+import Userprofile from "./screens/Userprofile";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -62,10 +64,6 @@ export default function App() {
           </Stack.Screen>
         </Stack.Navigator>
       ) : (
-        // <Stack.Navigator>
-        //   <Stack.Screen name="Home" component={Home}></Stack.Screen>
-        //   <Stack.Screen name="Card" component={Card}></Stack.Screen>
-        // </Stack.Navigator>
         <Stack.Navigator>
           <Stack.Screen
             name="Tab"
@@ -74,14 +72,15 @@ export default function App() {
             {() => (
               <Tab.Navigator
                 tabBarOptions={{
-                  activeTintColor: "tomato",
-                  inactiveTintColor: "gray",
+                  activeTintColor: "white",
+                  inactiveTintColor: "white",
+                  activeBackgroundColor: "#F35960",
                 }}
               >
                 <Tab.Screen
                   name="HomeScreen"
                   options={{
-                    tabBarLabel: "Home",
+                    tabBarLabel: "HomeScreen",
                     tabBarIcon: ({ color, size }) => (
                       <Ionicons name={"ios-home"} size={size} color={color} />
                     ),
@@ -91,6 +90,24 @@ export default function App() {
                     <Stack.Navigator>
                       <Stack.Screen name="Home" component={Home}></Stack.Screen>
                       <Stack.Screen name="Card" component={Card}></Stack.Screen>
+                    </Stack.Navigator>
+                  )}
+                </Tab.Screen>
+                <Tab.Screen
+                  name="Profile"
+                  options={{
+                    tabBarLabel: "Profile",
+                    tabBarIcon: ({ color, size }) => (
+                      <AntDesign name="user" size={24} color="black" />
+                    ),
+                  }}
+                >
+                  {() => (
+                    <Stack.Navigator>
+                      <Stack.Screen
+                        name="profile"
+                        component={Userprofile}
+                      ></Stack.Screen>
                     </Stack.Navigator>
                   )}
                 </Tab.Screen>
