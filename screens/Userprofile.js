@@ -9,6 +9,7 @@ import {
   Image,
 } from "react-native";
 import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
+import { Entypo } from "@expo/vector-icons";
 
 import * as ImagePicker from "expo-image-picker";
 
@@ -37,6 +38,7 @@ const Userprofile = ({ token, setToken }) => {
             headers: { Authorization: "Bearer " + token },
           }
         );
+        console.log("response: ", response.data);
         setData(response.data);
         setIsLoading(false);
       } catch (e) {
@@ -117,44 +119,20 @@ const Userprofile = ({ token, setToken }) => {
   return isLoading ? (
     <Text>chargement</Text>
   ) : (
-    <SafeAreaView>
-      {image && (
-        <View>
-          <Image source={{ uri: image }} style={{ width: 140, height: 50 }} />
-        </View>
-      )}
-
-      <View style={{ justifyContent: "center" }}>
-        <TextInput
-          onChangeText={(text) => {
-            setName(text);
-          }}
-        >
-          {data.name}
-        </TextInput>
-        <TextInput
-          onChangeText={(text) => {
-            setEmail(text);
-          }}
-        >
-          {data.email}
-        </TextInput>
-        <TextInput
-          onChangeText={(text) => {
-            setUsername(text);
-          }}
-        >
-          {data.username}
-        </TextInput>
-        <TextInput
-          onChangeText={(text) => {
-            setDescription(text);
-          }}
-        >
-          {data.description}
-        </TextInput>
-      </View>
+    <SafeAreaView
+      style={{ flex: 1, alignItems: "center", backgroundColor: "#F35960" }}
+    >
       <View>
+        <Text style={styles.title}>Profile</Text>
+      </View>
+      <View
+        style={{
+          backgroundColor: "white",
+          width: "100%",
+          height: "100%",
+          alignItems: "center",
+        }}
+      >
         <TouchableOpacity
           onPress={async () => {
             // gestion autorisation
@@ -171,26 +149,94 @@ const Userprofile = ({ token, setToken }) => {
             }
           }}
         >
-          <Text>mettre à jour photo</Text>
+          {data.photo.length > 0 ? (
+            <View>
+              <Image
+                //  soit "image" soit url de la requête
+                source={{ uri: image ? image : data.photo[0].url }}
+                style={{ width: 140, height: 150 }}
+              />
+            </View>
+          ) : (
+            <View>
+              <Entypo
+                name="user"
+                size={140}
+                color="black"
+                style={{ width: "100%" }}
+              />
+            </View>
+          )}
         </TouchableOpacity>
-      </View>
 
-      <View>
-        <TouchableOpacity onPress={handleProfilChange}>
-          <Text>Modifier</Text>
+        <View style={{ justifyContent: "center" }}>
+          <TextInput
+            style={styles.input}
+            onChangeText={(text) => {
+              setName(text);
+            }}
+          >
+            {data.name}
+          </TextInput>
+          <TextInput
+            onChangeText={(text) => {
+              setEmail(text);
+            }}
+          >
+            {data.email}
+          </TextInput>
+          <TextInput
+            onChangeText={(text) => {
+              setUsername(text);
+            }}
+          >
+            {data.username}
+          </TextInput>
+          <TextInput
+            onChangeText={(text) => {
+              setDescription(text);
+            }}
+          >
+            {data.description}
+          </TextInput>
+        </View>
+
+        <View>
+          <TouchableOpacity onPress={handleProfilChange}>
+            <Text>Modifier</Text>
+          </TouchableOpacity>
+        </View>
+        <TouchableOpacity
+          onPress={() => {
+            setToken(null);
+          }}
+        >
+          <Text>Déconnection</Text>
         </TouchableOpacity>
       </View>
-      <TouchableOpacity
-        onPress={() => {
-          setToken(null);
-        }}
-      >
-        <Text>Déconnection</Text>
-      </TouchableOpacity>
     </SafeAreaView>
   );
 };
 
 export default Userprofile;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  title: {
+    fontSize: 24,
+    color: "white",
+    textAlign: "center",
+    marginTop: 51,
+    marginBottom: 65,
+  },
+  input: {
+    marginBottom: 30,
+    borderBottomColor: "black",
+    borderBottomWidth: 1,
+    borderColor: "white",
+    width: 320,
+    borderBottomColor: "white",
+    color: "white",
+    fontSize: 16,
+    lineHeight: 18,
+  },
+});
