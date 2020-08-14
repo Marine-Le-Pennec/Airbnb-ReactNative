@@ -119,10 +119,8 @@ const Userprofile = ({ token, setToken }) => {
   return isLoading ? (
     <Text>chargement</Text>
   ) : (
-    <SafeAreaView
-      style={{ flex: 1, alignItems: "center", backgroundColor: "#F35960" }}
-    >
-      <View>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#F35960" }}>
+      <View style={{ height: 70, width: 375 }}>
         <Text style={styles.title}>Profile</Text>
       </View>
       <View
@@ -150,7 +148,7 @@ const Userprofile = ({ token, setToken }) => {
           }}
         >
           {data.photo.length > 0 ? (
-            <View>
+            <View style={{ marginTop: 30 }}>
               <Image
                 //  soit "image" soit url de la requête
                 source={{ uri: image ? image : data.photo[0].url }}
@@ -169,30 +167,34 @@ const Userprofile = ({ token, setToken }) => {
           )}
         </TouchableOpacity>
 
-        <View style={{ justifyContent: "center" }}>
+        <View style={{ justifyContent: "center", marginTop: 30 }}>
           <TextInput
             style={styles.input}
             onChangeText={(text) => {
               setName(text);
             }}
           >
-            {data.name}
+            {data.name}*
           </TextInput>
           <TextInput
+            style={styles.input}
             onChangeText={(text) => {
               setEmail(text);
             }}
           >
-            {data.email}
+            {data.email}*
           </TextInput>
           <TextInput
+            style={styles.input}
             onChangeText={(text) => {
               setUsername(text);
             }}
           >
-            {data.username}
+            {data.username}*
           </TextInput>
           <TextInput
+            multiline={true}
+            style={styles.description}
             onChangeText={(text) => {
               setDescription(text);
             }}
@@ -201,17 +203,18 @@ const Userprofile = ({ token, setToken }) => {
           </TextInput>
         </View>
 
-        <View>
+        <View style={styles.submit}>
           <TouchableOpacity onPress={handleProfilChange}>
-            <Text>Modifier</Text>
+            <Text style={styles.textSubmit}>Modifier</Text>
           </TouchableOpacity>
         </View>
         <TouchableOpacity
           onPress={() => {
             setToken(null);
           }}
+          style={styles.decoSub}
         >
-          <Text>Déconnection</Text>
+          <Text style={styles.textDeco}>Déconnection</Text>
         </TouchableOpacity>
       </View>
     </SafeAreaView>
@@ -225,8 +228,16 @@ const styles = StyleSheet.create({
     fontSize: 24,
     color: "white",
     textAlign: "center",
-    marginTop: 51,
-    marginBottom: 65,
+    marginTop: 30,
+  },
+  description: {
+    width: 318,
+    height: 117,
+    borderWidth: 1,
+    borderColor: "hsl(357, 87%, 65%)",
+    marginBottom: 5,
+    color: "black",
+    padding: 10,
   },
   input: {
     marginBottom: 30,
@@ -234,9 +245,40 @@ const styles = StyleSheet.create({
     borderBottomWidth: 1,
     borderColor: "white",
     width: 320,
-    borderBottomColor: "white",
-    color: "white",
+    borderBottomColor: "hsl(357, 87%, 65%)",
+    color: "black",
     fontSize: 16,
     lineHeight: 18,
+  },
+  submit: {
+    width: 150,
+    height: 50,
+    backgroundColor: "white",
+    borderRadius: 30,
+    borderColor: "red",
+    alignItems: "center",
+    justifyContent: "center",
+    marginBottom: 20,
+  },
+  textSubmit: {
+    fontSize: 19,
+    color: "#F35960",
+
+    alignItems: "center",
+  },
+  decoSub: {
+    width: 150,
+    height: 50,
+
+    backgroundColor: "#F35960",
+    borderRadius: 30,
+    alignItems: "center",
+    justifyContent: "center",
+  },
+  textDeco: {
+    fontSize: 19,
+    color: "white",
+
+    alignItems: "center",
   },
 });
