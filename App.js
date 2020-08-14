@@ -3,6 +3,7 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View, AsyncStorage } from "react-native";
 import { Ionicons } from "@expo/vector-icons";
 import { AntDesign } from "@expo/vector-icons";
+import { Feather } from "@expo/vector-icons";
 
 // React Navigation
 import { NavigationContainer } from "@react-navigation/native";
@@ -17,6 +18,7 @@ import Login from "./screens/Login";
 import Signup from "./screens/Signup";
 import Card from "./screens/Card";
 import Userprofile from "./screens/Userprofile";
+import AroundMe from "./screens/AroundMe";
 
 const Stack = createStackNavigator();
 const Tab = createBottomTabNavigator();
@@ -72,7 +74,7 @@ export default function App() {
               <Tab.Navigator
                 tabBarOptions={{
                   activeTintColor: "white",
-                  inactiveTintColor: "white",
+                  inactiveTintColor: "#F35960",
                   activeBackgroundColor: "#F35960",
                 }}
               >
@@ -108,8 +110,28 @@ export default function App() {
                         // component={Userprofile}
                         option={{ title: "User Profile" }}
                       >
-                        {() => <Userprofile token={token} />}
+                        {() => (
+                          <Userprofile token={token} setToken={setToken} />
+                        )}
                       </Stack.Screen>
+                    </Stack.Navigator>
+                  )}
+                </Tab.Screen>
+                <Tab.Screen
+                  name="AroundMe"
+                  options={{
+                    tabBarLabel: "Around me",
+                    tabBarIcon: ({ color, size }) => (
+                      <Feather name="map-pin" size={24} color="black" />
+                    ),
+                  }}
+                >
+                  {() => (
+                    <Stack.Navigator>
+                      <Stack.Screen
+                        name="AroundMe"
+                        component={AroundMe}
+                      ></Stack.Screen>
                     </Stack.Navigator>
                   )}
                 </Tab.Screen>

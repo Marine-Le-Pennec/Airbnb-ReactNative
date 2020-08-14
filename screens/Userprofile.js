@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 
 import {
   StyleSheet,
@@ -6,29 +6,25 @@ import {
   View,
   SafeAreaView,
   AsyncStorage,
+  Image,
 } from "react-native";
-import { TextInput } from "react-native-gesture-handler";
+import { TextInput, TouchableOpacity } from "react-native-gesture-handler";
 
 import * as ImagePicker from "expo-image-picker";
 
 import axios from "axios";
 
-const Userprofile = ({ token }) => {
+const Userprofile = ({ token, setToken }) => {
   const [data, setData] = useState({});
+  const [email, setEmail] = useState("");
+  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
+  const [description, setDescription] = useState("");
   const [isLoading, setIsLoading] = useState(true);
-  //   const [user, setUser] = useState("");
+  const [isUploading, setIsUploading] = useState(false);
+  const [image, setImage] = useState(null);
 
-  //   const id = async () => {
-  //     try {
-  //       const value = await AsyncStorage.getItem("id", id);
-  //       if (value !== null) {
-  //         setUser(value);
-  //       }
-  //     } catch (e) {
-  //       console.log(e);
-  //     }
-  //   };
-
+  // Récupération des données
   useEffect(() => {
     const fetchData = async () => {
       //   console.log("user id : ", user);
@@ -43,7 +39,6 @@ const Userprofile = ({ token }) => {
         );
         setData(response.data);
         setIsLoading(false);
-        console.log(response.data);
       } catch (e) {
         console.log(error.response);
       }
@@ -51,17 +46,147 @@ const Userprofile = ({ token }) => {
 
     fetchData();
   }, []);
+
+  const handleProfilChange = async () => {
+    try {
+      const id = await AsyncStorage.getItem("id");
+      // console.log(id);
+
+      const infos = await axios.put(
+        "https://express-airbnb-api.herokuapp.com/user/update/" + id,
+        {
+          email,
+          description,
+          username,
+          name,
+        },
+        { headers: { Authorization: "Bearer " + token } }
+      );
+
+      alert("Infos modifiées");
+    } catch (e) {
+      console.log(e);
+    }
+  };
+
+  // Envoie photo
+  const handleImagePicked = useCallback(async (pickerResult) => {
+    let uploadResponse;
+    try {
+      const id = await AsyncStorage.getItem("id");
+      // console.log("id : ", id);
+      setIsUploading(true);
+      // Récupérer l'url si il y en a une
+      if (!pickerResult.cancelled) {
+        const uri = pickerResult.uri;
+        // console.log(uri);
+        const uriParts = uri.split(".");
+        const fileType = uriParts[uriParts.length - 1];
+
+        // Création formData pour envoyer les params dans le back
+        const formData = new FormData();
+        formData.append("photo", {
+          uri,
+          name: `photo.${fileType}`,
+          type: `image/${fileType}`,
+        });
+        // console.log("formData: ", formData);
+
+        // Requete pour envoyer au serveur
+        uploadResponse = await axios.put(
+          "https://express-airbnb-api.herokuapp.com/user/upload_picture/" + id,
+          formData,
+          { headers: { Authorization: "Bearer " + token } }
+        );
+        console.log(uploadResponse.data.photo[0].url);
+
+        if (
+          Array.isArray(uploadResponse.data.photo) === true &&
+          uploadResponse.data.photo.length > 0
+        ) {
+          setImage(uploadResponse.data.photo[0].url);
+        }
+      }
+    } catch (e) {
+      alert("Chargement échoué");
+    } finally {
+      setIsUploading(false);
+    }
+  });
+
   return isLoading ? (
     <Text>chargement</Text>
   ) : (
     <SafeAreaView>
-      <View style={{}}>
-        <Text>Image</Text>
-        <Text>{data.name}</Text>
-        <Text>{data.email}</Text>
-        <Text>{data.username}</Text>
-        <Text>{data.description}</Text>
+      {image && (
+        <View>
+          <Image source={{ uri: image }} style={{ width: 140, height: 50 }} />
+        </View>
+      )}
+
+      <View style={{ justifyContent: "center" }}>
+        <TextInput
+          onChangeText={(text) => {
+            setName(text);
+          }}
+        >
+          {data.name}
+        </TextInput>
+        <TextInput
+          onChangeText={(text) => {
+            setEmail(text);
+          }}
+        >
+          {data.email}
+        </TextInput>
+        <TextInput
+          onChangeText={(text) => {
+            setUsername(text);
+          }}
+        >
+          {data.username}
+        </TextInput>
+        <TextInput
+          onChangeText={(text) => {
+            setDescription(text);
+          }}
+        >
+          {data.description}
+        </TextInput>
       </View>
+      <View>
+        <TouchableOpacity
+          onPress={async () => {
+            // gestion autorisation
+            const cameraRollPerm = await ImagePicker.requestCameraRollPermissionsAsync();
+            // only if user allows permission to camera roll
+            if (cameraRollPerm.status === "granted") {
+              const pickerResult = await ImagePicker.launchImageLibraryAsync({
+                allowsEditing: true,
+                aspect: [4, 3],
+              });
+              // console.log(pickerResult);
+              // Appel de la fonction handleImagePicked pour envoyer vers le back
+              handleImagePicked(pickerResult);
+            }
+          }}
+        >
+          <Text>mettre à jour photo</Text>
+        </TouchableOpacity>
+      </View>
+
+      <View>
+        <TouchableOpacity onPress={handleProfilChange}>
+          <Text>Modifier</Text>
+        </TouchableOpacity>
+      </View>
+      <TouchableOpacity
+        onPress={() => {
+          setToken(null);
+        }}
+      >
+        <Text>Déconnection</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };

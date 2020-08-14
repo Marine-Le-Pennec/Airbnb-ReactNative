@@ -44,7 +44,7 @@ const Login = ({ setToken }) => {
           alert("Ravis de vous voir de retour!");
         }
       } catch (e) {
-        console.log(e);
+        alert("E-mail ou mot de passe inconnu!");
         // alert(e.message);
       }
     }
@@ -54,10 +54,12 @@ const Login = ({ setToken }) => {
       extraScrollHeight={110}
       contentContainerStyle={styles.container}
     >
-      <SafeAreaView style={{ backgroundColor: "#F35960", flex: 1 }}>
+      <SafeAreaView
+        style={{ backgroundColor: "#F35960", alignItems: "center" }}
+      >
         <View style={styles.header}>
           <Image
-            style={{ width: 100 }}
+            style={{ width: 100, alignItems: "center" }}
             source={require("../assets/Vector.png")}
           ></Image>
         </View>
@@ -114,7 +116,6 @@ const styles = StyleSheet.create({
     marginTop: 109,
     marginBottom: 129,
     width: "100%",
-    alignItems: "center",
   },
   input: {
     marginBottom: 59,

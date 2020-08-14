@@ -37,8 +37,16 @@ export default function Home() {
   return (
     <>
       {loading ? (
-        <SafeAreaView style={{ flex: 1, backgroundColor: "pink" }}>
-          <Image source={require("../assets/Rolling-1s-200px.gif")}></Image>
+        <SafeAreaView
+          style={{
+            flex: 1,
+            backgroundColor: "pink",
+            alignItems: "center",
+            flexDirection: "row",
+            justifyContent: "center",
+          }}
+        >
+          <Image source={require("../assets/Rolling-1s-200px.gif")} />
         </SafeAreaView>
       ) : (
         <SafeAreaView style={{ flex: 1, backgroundColor: "#FF495A" }}>
